@@ -1,37 +1,34 @@
-import { StyleSheet ,  View, Text } from 'react-native'
-import React, { FC , createContext } from 'react'
+import React, { FC, createContext, useState, useMemo } from 'react'
+import { AppWriteService } from './Service'; // Ensure this matches your Service file name
+import { PropsWithChildren } from 'react'
 
-import Appwrite from './service'
-import { PropsWithChildren } from 'react';
-import { useState } from 'react';
-
+const appwriteServiceInstance = new AppWriteService();
 
 type AppContextType = {
-    appwrite: Appwrite;
+    appwrite: AppWriteService;
     isLoggedIn: boolean;
     setIsLoggedIn: (isLoggedIn: boolean) => void
 }
 
-export const AppwriteContext = createContext<AppContextType>({
-    appwrite: new Appwrite(),
+export const AppWriteContext = createContext<AppContextType>({
+    appwrite: appwriteServiceInstance,
     isLoggedIn: false,
     setIsLoggedIn: () => {}
 })
 
-const AppWriteContext : FC<PropsWithChildren> = ({children}) => {
-  const [isLoggedIn , setIsLoggedIn] = useState(false)
-    const defaultValue = {
-        appwrite: new Appwrite(),
+export const AppWriteProvider: FC<PropsWithChildren> = ({children}) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    const defaultValue = useMemo(() => ({
+        appwrite: appwriteServiceInstance,
         isLoggedIn,
         setIsLoggedIn,
-    }
-  return (
-   <AppwriteContext.Provider value={defaultValue}>
-      {children}
-    </AppwriteContext.Provider>
-  )
+    }), [isLoggedIn]);
+
+    return (
+        <AppWriteContext.Provider value={defaultValue}>
+            {children}
+        </AppWriteContext.Provider>
+    )
 }
-
-export default AppWriteContext
-
-const styles = StyleSheet.create({})
+export default AppWriteProvider;

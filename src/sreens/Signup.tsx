@@ -2,14 +2,14 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Pressable, Pla
 import React, {useContext, useState} from 'react'
 import { FAB } from '@rneui/themed'
 import Toast from 'react-native-toast-message'
-import {AppwriteContext} from '../appwrite/AppwriteContext'
+import {AppWriteContext} from '../appwrite/AppwriteContext'
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AppStackParamList} from '../routes/AuthStack';
 
 type SignupScreenProps = NativeStackScreenProps<AppStackParamList, 'Signup'>
 
 const Signup = ({navigation}: SignupScreenProps) => {
-  const {appwrite, setIsLoggedIn} = useContext(AppwriteContext)
+  const {appwrite, setIsLoggedIn} = useContext(AppWriteContext)
 
   const [error, setError] = useState<string>('')
   const [name, setName] = useState<string>('')
@@ -44,7 +44,7 @@ const Signup = ({navigation}: SignupScreenProps) => {
         name,
       };
       appwrite
-        .CreateAccount(user)
+        .createAccount(user)
         .then((response: any) => {
           if (response) {
             setIsLoggedIn(true)
@@ -55,7 +55,7 @@ const Signup = ({navigation}: SignupScreenProps) => {
             })
           }
         })
-        .catch(e => {
+        .catch((e:any) => {
           console.log(e);
           setError(e.message)
           Toast.show({

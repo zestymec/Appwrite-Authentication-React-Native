@@ -1,14 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { StatusBar } from 'react-native';
+import Toast from 'react-native-toast-message';
+
+// Context aur Router imports
+import { AppWriteProvider , AppWriteContext } from './appwrite/AppwriteContext';
+import { Router } from './routes/Router';
 
 const App = () => {
   return (
-    <View>
-      <Text>App</Text>
-    </View>
-  )
-}
+    <AppWriteProvider>
+    <Router />
+  </AppWriteProvider>
+     
+  );
+};
 
-export default App
-
-const styles = StyleSheet.create({})
+export default App;

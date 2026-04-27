@@ -2,10 +2,13 @@ import { ID, Client, Account } from 'appwrite'
 import Config from 'react-native-config'
 import Toast from 'react-native-toast-message'
 
-const AppWriteClient = new Client()
 
 const APPWRITE_ENDPOINT: string = Config.APPWRITE_ENDPOINT!
 const APPWRITE_PROJECT_ID: string = Config.APPWRITE_PROJECT_ID!
+
+const client = new Client()
+    .setEndpoint(APPWRITE_ENDPOINT)
+    .setProject(APPWRITE_PROJECT_ID)
 
 type CreateUserAccount = {
     email: string;
@@ -18,77 +21,69 @@ type LoginUserAccount = {
     password: string;
 }
 
-class AppWriteService {
-    account;
+export class AppWriteService {
+    account: Account;
 
     constructor() {
-        AppWriteClient
-            .setEndpoint(APPWRITE_ENDPOINT)
-            .setProject(APPWRITE_PROJECT_ID)
-
-        this.account = new Account(AppWriteClient)
+        this.account = new Account(client)
     }
 
-    async CreateAccount({ email, password, name }: CreateUserAccount) {
+
+    async createAccount({ email, password, name }: CreateUserAccount) {
         try {
-            const userAccount = await this.account.create({
-                userId: ID.unique(),
-                email: email,
-                password: password,
-                name: name
-            });
+            const userAccount = await this.account.create(
+                ID.unique(),
+                email,
+                password,
+                name
+            );
 
             if (userAccount) {
                 return this.login({ email, password });
-            } else {
-                return userAccount;
             }
-        } catch (error) {
+            return userAccount;
+        } catch (error: any) {
             Toast.show({
                 type: 'error',
-                text1: 'Error',
-                text2: String(error),
-                visibilityTime: 4000,
+                text1: 'Signup Error',
+                text2: error?.message || 'Something went wrong',
             });
-
             console.log("Appwrite service :: createAccount() :: " + error);
         }
     }
 
-    async login({email, password}: LoginUserAccount) {
+    async login({ email, password }: LoginUserAccount) {
         try {
-            return await this.account.createEmailPasswordSession({
+            return await this.account.createEmailPasswordSession(
                 email,
                 password
-            });
-        } catch (error) {
+            );
+        } catch (error: any) {
             Toast.show({
                 type: 'error',
                 text1: 'Login Failed',
-                text2: String(error),
-                visibilityTime: 4000
+                text2: error?.message || 'Invalid credentials'
             });
-
-            console.log("Appwrite service :: loginAccount() :: " + error);
+            console.log("Appwrite service :: login() :: " + error);
         }
     }
+
     async getCurrentUser() {
         try {
-            return await this.account.get()
+            return await this.account.get();
         } catch (error) {
-            console.log("Appwrite service :: getCurrentAccount() :: " + error);
+            console.log("Appwrite service :: getCurrentUser() :: " + error);
+            return null; 
         }
     }
 
     async logout() {
         try {
-            return await this.account.deleteSession({
-                sessionId: 'current'
-            });
+            return await this.account.deleteSession('current');
         } catch (error) {
             console.log("Appwrite service :: logout() :: " + error);
         }
     }
 }
 
-export default AppWriteService;
+export default new AppWriteService();
