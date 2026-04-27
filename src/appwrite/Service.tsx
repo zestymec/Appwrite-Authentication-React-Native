@@ -55,24 +55,24 @@ class AppWriteService {
         }
     }
 
-        async LoginUserAccount({ email, password }: LoginUserAccount) {
-            try {
-                return await this.account.createEmailPasswordSession({
-                    email,
-                    password
-                });
-            } catch (error) {
-                Toast.show({
-                    type: 'error',
-                    text1: 'Login Failed',
-                    text2: String(error),
-                    visibilityTime: 4000
-                });
+    async login({email, password}: LoginUserAccount) {
+        try {
+            return await this.account.createEmailPasswordSession({
+                email,
+                password
+            });
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Login Failed',
+                text2: String(error),
+                visibilityTime: 4000
+            });
 
-                console.log("Appwrite service :: loginAccount() :: " + error);
-            }
+            console.log("Appwrite service :: loginAccount() :: " + error);
         }
-          async getCurrentUser(){
+    }
+    async getCurrentUser() {
         try {
             return await this.account.get()
         } catch (error) {
@@ -89,6 +89,6 @@ class AppWriteService {
             console.log("Appwrite service :: logout() :: " + error);
         }
     }
-    }
+}
 
 export default AppWriteService;
