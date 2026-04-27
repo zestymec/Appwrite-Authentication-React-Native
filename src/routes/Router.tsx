@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { AppWriteContext } from '../appwrite/AppWriteContext'; // Corrected Path
+import { AppWriteContext } from '../appwrite/AppWriteContext'; 
 import Loading from '../coponents/Loading';
 import { AppStack } from './AppStack';
 import { AuthStack } from './AuthStack';

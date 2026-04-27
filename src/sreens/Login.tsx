@@ -2,14 +2,14 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Pressable, Pla
 import React, {useContext, useState} from 'react'
 import { FAB } from '@rneui/themed'
 import Toast from 'react-native-toast-message'
-import {AppwriteContext} from '../appwrite/AppwriteContext'
+import {AppWriteContext} from '../appwrite/AppWriteContext'
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AppStackParamList} from '../routes/AuthStack';
 
 type LoginScreenProps = NativeStackScreenProps<AppStackParamList, 'Login'>
 
 const Login = ({navigation}: LoginScreenProps) => {
-  const {appwrite, setIsLoggedIn} = useContext(AppwriteContext);
+  const {appwrite, setIsLoggedIn} = useContext(AppWriteContext);
 
   const [error, setError] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -40,7 +40,7 @@ const Login = ({navigation}: LoginScreenProps) => {
           })
         }
       })
-      .catch(e   => {
+      .catch((e :any)   => {
         console.log(e);
         setError('Incorrect email or password')
         Toast.show({

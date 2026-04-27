@@ -5,7 +5,7 @@ import { FAB } from '@rneui/themed'
 
 import Toast from 'react-native-toast-message'
 
-import { AppwriteContext } from '../appwrite/AppwriteContext'
+import { AppWriteContext } from '../appwrite/AppWriteContext'
 
 type UserObj = {
   name: String;
@@ -14,7 +14,7 @@ type UserObj = {
 
 const Home = () => {
   const [userData, setUserData] = useState<UserObj>()
-  const { appwrite, setIsLoggedIn } = useContext(AppwriteContext)
+  const { appwrite, setIsLoggedIn } = useContext(AppWriteContext)
 
   const handleLogout = () => {
     appwrite.logout()
