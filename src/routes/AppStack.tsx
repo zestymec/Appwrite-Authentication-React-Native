@@ -1,23 +1,25 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Home from '../sreens/Home';
-import { createNativeStackNavigator} from '@react-navigation/native-stack'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-export type AppStackParamlist ={
-Home : undefined;
+import Home from '../sreens/Home'
+
+export type AppStackParamList = {
+  Home: undefined;
 }
 
-const Stack = createNativeStackNavigator<AppStackParamlist>();
+const Stack = createNativeStackNavigator<AppStackParamList>();
 
 
-const AppStack = () => {
+export const AppStack = () => {
   return (
-    <View>
-      <Text>AppStack</Text>
-    </View>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign: 'center',
+        headerBackVisible: true,
+      }}
+    >
+      <Stack.Screen name='Home' component={Home} />
+    </Stack.Navigator>
   )
 }
-
-export default AppStack
-
-const styles = StyleSheet.create({})

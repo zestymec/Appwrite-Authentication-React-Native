@@ -1,14 +1,40 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { View, Text } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import {NavigationContainer} from '@react-navigation/native'
 
-const Router = () => {
-  return (
-    <View>
-      <Text>Router</Text>
-    </View>
-  )
+import {AppwriteContext} from '../appwrite/AppwriteContext';
+import Loading from '../coponents/Loading';
+
+import { AppStack } from './AppStack';
+import { AuthStack } from './AuthStack';
+
+export const Router = () => {
+
+  const [isLoading , setIsLoading] = useState<boolean>(false)
+  const {appwrite, isLoggedIn,setIsLoggedIn} = useContext(AppwriteContext)
+
+  useEffect(() => {
+    appwrite
+    .getCurrentUser()
+    .then(response => {
+      setIsLoading(false)
+      if (response) {
+          setIsLoggedIn(true)
+      }
+    })
+    .catch(_ => {
+      setIsLoading(false)
+      setIsLoggedIn(false)
+    })
+  }, [appwrite, setIsLoggedIn])
+  
+  if (isLoading) {
+      return <Loading />
+  }
+
+return (
+  <NavigationContainer>
+      {isLoggedIn ? <AppStack /> : <AuthStack/> }
+  </NavigationContainer>
+)
 }
-
-export default Router
-
-const styles = StyleSheet.create({})
